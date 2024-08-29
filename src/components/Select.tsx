@@ -1,4 +1,15 @@
-const Select = (props) => {
+import { IOption } from "../interfaces";
+
+interface ISelectProps {
+  name?: string;
+  labelKey?: keyof IOption;
+  valueKey?: keyof IOption;
+  options: IOption[];
+  selected?: IOption | null;
+  onChange: (selectedOption: IOption | null, event: React.ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const Select = (props: ISelectProps) => {
   const {
     name = '',
     labelKey = 'name',
@@ -8,7 +19,7 @@ const Select = (props) => {
     onChange,
   } = props;
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { value } = event.target;
     const option = options.find((item) => item[valueKey] === value) ?? null;
     onChange(option, event);

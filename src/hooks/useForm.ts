@@ -1,14 +1,19 @@
-import { useRef, useState } from 'react';
+import { useRef, useState } from "react";
 
-export const useForm = (form) => {
-  const [, forceUpdate] = useState();
+export interface INameForm {
+  firstName: string;
+  lastName: string;
+}
 
-  const stateRef = useRef(form);
+export const useForm = <T extends Record<string, any>>(form: T) => {
+  const [, forceUpdate] = useState({});
 
-  const setValue = (key, value) => {
+  const stateRef = useRef<T>(form);
+
+  const setValue = (key: keyof T, value: T[keyof T]) => {
     stateRef.current[key] = value;
     forceUpdate({});
   };
 
-  return [stateRef.current, setValue];
+  return [stateRef.current, setValue] as const;
 };

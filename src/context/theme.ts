@@ -1,4 +1,11 @@
-import { createContext } from 'react';
+import { createContext } from "react";
+import { ETheme } from "../interfaces";
 
-export const ThemeContext = createContext(['light', () => null]);
+export type TSetTheme = (theme: ETheme) => void;
+
+export const ThemeContext = createContext<[ETheme, TSetTheme]>([
+  ETheme.Light,
+  () => null,
+]);
+
 export const ThemeProvider = ThemeContext.Provider;

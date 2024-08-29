@@ -1,31 +1,39 @@
-import { useEffect, useState } from 'react';
-import { getFirstOptions, getSecondOptions } from '../api';
-import Button from '../components/Button';
-import Select from '../components/Select';
-import ShowError from '../components/ShowError';
-import { ThemeProvider } from '../context/theme';
-import { useForm } from '../hooks';
-import { saveSettings } from '../utils';
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+
+import { getFirstOptions, getSecondOptions } from "../api";
+import { ETheme, IOption } from "../interfaces";
+import { saveSettings } from "../utils";
+import ShowError from "../components/ShowError";
+import Button from "../components/Button";
+import Select from "../components/Select";
+import { INameForm } from "../hooks/useForm";
+import { useForm } from "../hooks";
+import { ThemeProvider } from "../context/theme";
 
 const HomePage = () => {
-  const [theme, setTheme] = useState(window.appSettings.theme);
+  const [theme, setTheme] = useState<ETheme>(window.appSettings.theme);
 
-  const [firstOptions, setFirstOtions] = useState([]);
-  const [selectedFirstOption, setSelectedFirstOption] = useState(null);
+  const [firstOptions, setFirstOptions] = useState<IOption[]>([]);
+  const [selectedFirstOption, setSelectedFirstOption] =
+    useState<IOption | null>(null);
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>("");
 
-  const [secondOptions, setSecondOptions] = useState([]);
-  const [selectedSecondOption, setSelectedSecondOption] = useState(null);
+  const [secondOptions, setSecondOptions] = useState<IOption[]>([]);
+  const [selectedSecondOption, setSelectedSecondOption] =
+    useState<IOption | null>(null);
 
-  const [nameForm, setName] = useForm({ firstName: '', lastName: '' });
+  const [nameForm, setName] = useForm<INameForm>({
+    firstName: "",
+    lastName: "",
+  });
 
   const getOptions = async () => {
     try {
       const data = await getFirstOptions();
-      setFirstOtions(data);
+      setFirstOptions(data);
     } catch (error) {
-      setError(error);
+      setError(String(error));
     }
   };
 
@@ -33,38 +41,44 @@ const HomePage = () => {
     getOptions();
   }, []);
 
-  const onChangeFirstOption = async (value) => {
+  const onChangeFirstOption = async (value: IOption | null) => {
     setSelectedFirstOption(value);
     if (value == null) {
       setSelectedSecondOption(null);
+      setSecondOptions([]);
+      return;
     }
 
-    const data = await getSecondOptions({ id: value.id });
-    setSecondOptions(data);
+    try {
+      const data = await getSecondOptions({ id: value.id });
+      setSecondOptions(data);
+    } catch (error) {
+      setError(String(error));
+    }
   };
 
-  const onChangeSecondOption = (value) => {
+  const onChangeSecondOption = (value: IOption | null) => {
     setSelectedSecondOption(value);
   };
 
-  const handleChangeNameForm = (event) => {
+  const handleChangeNameForm = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setName(name, value);
+    setName(name as keyof INameForm, value);
   };
 
   const onHideError = () => {
-    setError('');
+    setError("");
     getOptions();
   };
 
-  const saveForm = (e) => {
+  const saveForm = (e: FormEvent) => {
     e.preventDefault();
   };
 
   const toggleTheme = () => {
     setTheme((prev) => {
-      const next = prev === 'light' ? 'dark' : 'light';
-      saveSettings('theme', next);
+      const next = prev === ETheme.Light ? ETheme.Dark : ETheme.Light;
+      saveSettings("theme", next);
       return next;
     });
   };
@@ -122,12 +136,12 @@ const HomePage = () => {
           variant="secondary"
           onClick={saveForm}
           type="submit"
-          disabled={error !== ''}
+          disabled={error !== ""}
         >
           <span>Save form</span>
         </Button>
         <br />
-        <ShowError delay={1000} show={error !== ''} onHide={onHideError}>
+        <ShowError delay={1000} show={error !== ""} onHide={onHideError}>
           <p>{error}</p>
         </ShowError>
       </form>

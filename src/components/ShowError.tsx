@@ -1,6 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-const ShowError = (props) => {
+interface IShowErrorProps {
+  children?: React.ReactNode;
+  onHide: () => void;
+  delay?: number;
+  show: boolean;
+}
+
+const ShowError = (props: IShowErrorProps) => {
   const { children, onHide, delay = 5000, show } = props;
 
   useEffect(() => {

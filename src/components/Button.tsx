@@ -1,27 +1,39 @@
-import { useTheme } from '../hooks';
+import { useTheme } from "../hooks";
+import { ETheme } from "../interfaces";
 
-const Button = (props) => {
+type ButtonVariant = "primary" | "secondary" | "warn" | "error";
+
+interface IButtonProps {
+  variant?: ButtonVariant;
+  type?: "button" | "submit" | "reset";
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  children?: React.ReactNode;
+  outlined?: boolean;
+  disabled?: boolean;
+}
+
+const Button = (props: IButtonProps) => {
   const {
     children,
-    variant = 'primary', // secondary, warn, error
+    variant = "primary",
     disabled = false,
     outlined = false,
     onClick,
-    type = 'button',
+    type = "button",
   } = props;
 
   const [theme] = useTheme();
 
   const buttonStyles =
-    theme === 'light'
-      ? { background: 'white', color: 'black' }
-      : { background: 'black', color: 'white' };
+    theme === ETheme.Light
+      ? { background: "white", color: "black" }
+      : { background: "black", color: "white" };
 
   return (
     <button
       type={type}
       className={`button button--${variant} ${
-        outlined ? 'button--outlined' : ''
+        outlined ? "button--outlined" : ""
       }`}
       style={buttonStyles}
       disabled={disabled}
