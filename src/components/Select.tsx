@@ -38,7 +38,7 @@ const Select = <T extends IOptionWithName | IOptionWithLabel>(props: ISelectProp
           value={item[valueKey]}
           defaultValue={selected?.value}
         >
-          {String(item[labelKey as keyof T])}
+          {item[labelKey as keyof T] as string}
         </option>
       ))}
     </select>
