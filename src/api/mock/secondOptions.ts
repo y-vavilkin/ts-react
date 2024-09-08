@@ -1,7 +1,7 @@
-import { IOption } from "../../interfaces";
+import { IOptionWithLabel } from "../../interfaces";
 
 export interface IOptionsMap {
-  [key: number]: IOption[];
+  [key: number]: IOptionWithLabel[];
 }
 
 export const MOCK_SECOND_OPTIONS: IOptionsMap = {

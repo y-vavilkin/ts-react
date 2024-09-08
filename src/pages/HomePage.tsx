@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 import { getFirstOptions, getSecondOptions } from "../api";
-import { ETheme, IOption } from "../interfaces";
+import {ETheme, IOptionWithLabel, IOptionWithName} from "../interfaces";
 import { saveSettings } from "../utils";
 import ShowError from "../components/ShowError";
 import Button from "../components/Button";
@@ -13,15 +13,15 @@ import { ThemeProvider } from "../context/theme";
 const HomePage = () => {
   const [theme, setTheme] = useState<ETheme>(window.appSettings.theme);
 
-  const [firstOptions, setFirstOptions] = useState<IOption[]>([]);
+  const [firstOptions, setFirstOptions] = useState<IOptionWithName[]>([]);
   const [selectedFirstOption, setSelectedFirstOption] =
-    useState<IOption | null>(null);
+    useState<IOptionWithName | null>(null);
 
   const [error, setError] = useState<string>("");
 
-  const [secondOptions, setSecondOptions] = useState<IOption[]>([]);
+  const [secondOptions, setSecondOptions] = useState<IOptionWithLabel[]>([]);
   const [selectedSecondOption, setSelectedSecondOption] =
-    useState<IOption | null>(null);
+    useState<IOptionWithLabel | null>(null);
 
   const [nameForm, setName] = useForm<INameForm>({
     firstName: "",
@@ -41,7 +41,7 @@ const HomePage = () => {
     getOptions();
   }, []);
 
-  const onChangeFirstOption = async (value: IOption | null) => {
+  const onChangeFirstOption = async (value: IOptionWithName | null) => {
     setSelectedFirstOption(value);
     if (value == null) {
       setSelectedSecondOption(null);
@@ -57,7 +57,7 @@ const HomePage = () => {
     }
   };
 
-  const onChangeSecondOption = (value: IOption | null) => {
+  const onChangeSecondOption = (value: IOptionWithLabel | null) => {
     setSelectedSecondOption(value);
   };
 
