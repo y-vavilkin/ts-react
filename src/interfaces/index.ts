@@ -1,14 +1,13 @@
 export enum ETheme { Light, Dark }
 
-export interface AppSettings {
+export interface IAppSettings {
   theme: ETheme;
   requestDelay: number;
   requestChanceToSuccess: number;
-  [key: string]: unknown;
 }
 
 export interface IOption {
-  id: number;
+  readonly id: number;
   value: string | number;
 }
 

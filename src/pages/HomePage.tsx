@@ -1,36 +1,30 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-
-import { getFirstOptions, getSecondOptions } from "../api";
-import {ETheme, IOptionWithLabel, IOptionWithName} from "../interfaces";
-import { saveSettings } from "../utils";
-import ShowError from "../components/ShowError";
-import Button from "../components/Button";
-import Select from "../components/Select";
-import { INameForm } from "../hooks/useForm";
-import { useForm } from "../hooks";
-import { ThemeProvider } from "../context/theme";
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { getFirstOptions, getSecondOptions } from '../api';
+import Button from '../components/Button';
+import Select from '../components/Select';
+import ShowError from '../components/ShowError';
+import { ThemeProvider } from '../context/theme';
+import { useForm } from '../hooks';
+import { saveSettings } from '../utils';
+import {ETheme, IOptionWithLabel, IOptionWithName} from '../interfaces';
+import { INameForm } from '../hooks/useForm';
 
 const HomePage = () => {
   const [theme, setTheme] = useState<ETheme>(window.appSettings.theme);
 
   const [firstOptions, setFirstOptions] = useState<IOptionWithName[]>([]);
-  const [selectedFirstOption, setSelectedFirstOption] =
-    useState<IOptionWithName | null>(null);
+  const [selectedFirstOption, setSelectedFirstOption] = useState<IOptionWithName | null>(null);
 
-  const [error, setError] = useState<string>("");
+  const [error, setError] = useState<string>('');
 
   const [secondOptions, setSecondOptions] = useState<IOptionWithLabel[]>([]);
-  const [selectedSecondOption, setSelectedSecondOption] =
-    useState<IOptionWithLabel | null>(null);
+  const [selectedSecondOption, setSelectedSecondOption] = useState<IOptionWithLabel | null>(null);
 
-  const [nameForm, setName] = useForm<INameForm>({
-    firstName: "",
-    lastName: "",
-  });
+  const [nameForm, setName] = useForm<INameForm>({ firstName: '', lastName: '' });
 
   const getOptions = async () => {
     try {
-      const data = await getFirstOptions();
+      const data: IOptionWithName[] = await getFirstOptions();
       setFirstOptions(data);
     } catch (error) {
       setError(String(error));
@@ -45,16 +39,11 @@ const HomePage = () => {
     setSelectedFirstOption(value);
     if (value == null) {
       setSelectedSecondOption(null);
-      setSecondOptions([]);
       return;
     }
 
-    try {
-      const data = await getSecondOptions({ id: value.id });
-      setSecondOptions(data);
-    } catch (error) {
-      setError(String(error));
-    }
+    const data = await getSecondOptions({ id: value.id });
+    setSecondOptions(data);
   };
 
   const onChangeSecondOption = (value: IOptionWithLabel | null) => {
@@ -67,7 +56,7 @@ const HomePage = () => {
   };
 
   const onHideError = () => {
-    setError("");
+    setError('');
     getOptions();
   };
 
@@ -78,7 +67,7 @@ const HomePage = () => {
   const toggleTheme = () => {
     setTheme((prev) => {
       const next = prev === ETheme.Light ? ETheme.Dark : ETheme.Light;
-      saveSettings("theme", next);
+      saveSettings('theme', next);
       return next;
     });
   };
@@ -136,12 +125,12 @@ const HomePage = () => {
           variant="secondary"
           onClick={saveForm}
           type="submit"
-          disabled={error !== ""}
+          disabled={error !== ''}
         >
           <span>Save form</span>
         </Button>
         <br />
-        <ShowError delay={1000} show={error !== ""} onHide={onHideError}>
+        <ShowError delay={1000} show={error !== ''} onHide={onHideError}>
           <p>{error}</p>
         </ShowError>
       </form>

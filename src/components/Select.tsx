@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { IOption, IOptionWithLabel, IOptionWithName} from "../interfaces";
+import { IOption, IOptionWithLabel, IOptionWithName} from '../interfaces';
 
 interface ISelectProps<T extends IOptionWithName | IOptionWithLabel> {
   name?: string;

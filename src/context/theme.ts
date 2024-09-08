@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { ETheme } from "../interfaces";
+import { createContext } from 'react';
+import { ETheme } from '../interfaces';
 
 export type TSetTheme = (theme: ETheme) => void;
 

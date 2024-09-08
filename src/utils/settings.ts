@@ -1,4 +1,10 @@
-import { ETheme } from "../interfaces";
+import { ETheme, IAppSettings } from '../interfaces'
+
+declare global {
+  interface Window {
+    appSettings: IAppSettings;
+  }
+}
 
 export const loadSettings = (): void => {
   try {
@@ -15,7 +21,7 @@ export const loadSettings = (): void => {
   }
 };
 
-export const saveSettings = (key: string, settings: number): void => {
+export const saveSettings = <K extends keyof IAppSettings>(key: K, settings: IAppSettings[K]): void => {
   window.appSettings[key] = settings;
   localStorage.setItem('app-settings', JSON.stringify(window.appSettings));
 };
