@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { IOption, IOptionWithLabel, IOptionWithName} from '../interfaces';
+import { IOptionWithLabel, IOptionWithName} from '../interfaces';
 
-interface ISelectProps<T extends IOptionWithName | IOptionWithLabel> {
+interface ISelectProps<T> {
   name?: string;
-  labelKey?: keyof IOptionWithLabel;
-  valueKey?: keyof IOption;
+  labelKey?: keyof T;
+  valueKey?: keyof T;
   options: T[];
   selected: T | null;
   onChange: (selectedOption: T | null, event: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -14,8 +14,8 @@ interface ISelectProps<T extends IOptionWithName | IOptionWithLabel> {
 const Select = <T extends IOptionWithName | IOptionWithLabel>(props: ISelectProps<T>) => {
   const {
     name = '',
-    labelKey = 'name',
-    valueKey = 'value',
+    labelKey = 'name' as keyof T,
+    valueKey = 'value' as keyof T,
     options,
     selected,
     onChange,
@@ -35,10 +35,10 @@ const Select = <T extends IOptionWithName | IOptionWithLabel>(props: ISelectProp
       {options.map((item) => (
         <option
           key={item.id}
-          value={item[valueKey]}
+          value={String(item[valueKey])}
           defaultValue={selected?.value}
         >
-          {item[labelKey as keyof T] as string}
+          {String(item[labelKey])}
         </option>
       ))}
     </select>
