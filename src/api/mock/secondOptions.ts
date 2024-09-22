@@ -1,4 +1,7 @@
-export const MOCK_SECOND_OPTIONS = {
+import { IOptionWithLabel } from '../../interfaces'
+import { TOptionID } from './firstOptions.ts'
+
+export const MOCK_SECOND_OPTIONS: Record<TOptionID['id'], IOptionWithLabel[]> = {
   1: [
     { id: 1, label: 'A-A', value: 'aa' },
     { id: 2, label: 'A-B', value: 'ab' },

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { getFirstOptions, getSecondOptions } from '../api';
 import Button from '../components/Button';
 import Select from '../components/Select';
@@ -6,26 +6,28 @@ import ShowError from '../components/ShowError';
 import { ThemeProvider } from '../context/theme';
 import { useForm } from '../hooks';
 import { saveSettings } from '../utils';
+import {ETheme, IOptionWithLabel, IOptionWithName} from '../interfaces';
+import { INameForm } from '../hooks/useForm';
 
 const HomePage = () => {
-  const [theme, setTheme] = useState(window.appSettings.theme);
+  const [theme, setTheme] = useState<ETheme>(window.appSettings.theme);
 
-  const [firstOptions, setFirstOtions] = useState([]);
-  const [selectedFirstOption, setSelectedFirstOption] = useState(null);
+  const [firstOptions, setFirstOptions] = useState<IOptionWithName[]>([]);
+  const [selectedFirstOption, setSelectedFirstOption] = useState<IOptionWithName | null>(null);
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string>('');
 
-  const [secondOptions, setSecondOptions] = useState([]);
-  const [selectedSecondOption, setSelectedSecondOption] = useState(null);
+  const [secondOptions, setSecondOptions] = useState<IOptionWithLabel[]>([]);
+  const [selectedSecondOption, setSelectedSecondOption] = useState<IOptionWithLabel | null>(null);
 
-  const [nameForm, setName] = useForm({ firstName: '', lastName: '' });
+  const [nameForm, setName] = useForm<INameForm>({ firstName: '', lastName: '' });
 
   const getOptions = async () => {
     try {
-      const data = await getFirstOptions();
-      setFirstOtions(data);
+      const data: IOptionWithName[] = await getFirstOptions();
+      setFirstOptions(data);
     } catch (error) {
-      setError(error);
+      setError(String(error));
     }
   };
 
@@ -33,23 +35,24 @@ const HomePage = () => {
     getOptions();
   }, []);
 
-  const onChangeFirstOption = async (value) => {
+  const onChangeFirstOption = async (value: IOptionWithName | null) => {
     setSelectedFirstOption(value);
     if (value == null) {
       setSelectedSecondOption(null);
+      return;
     }
 
     const data = await getSecondOptions({ id: value.id });
     setSecondOptions(data);
   };
 
-  const onChangeSecondOption = (value) => {
+  const onChangeSecondOption = (value: IOptionWithLabel | null) => {
     setSelectedSecondOption(value);
   };
 
-  const handleChangeNameForm = (event) => {
+  const handleChangeNameForm = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setName(name, value);
+    setName(name as keyof INameForm, value);
   };
 
   const onHideError = () => {
@@ -57,13 +60,13 @@ const HomePage = () => {
     getOptions();
   };
 
-  const saveForm = (e) => {
+  const saveForm = (e: FormEvent) => {
     e.preventDefault();
   };
 
   const toggleTheme = () => {
     setTheme((prev) => {
-      const next = prev === 'light' ? 'dark' : 'light';
+      const next = prev === ETheme.Light ? ETheme.Dark : ETheme.Light;
       saveSettings('theme', next);
       return next;
     });

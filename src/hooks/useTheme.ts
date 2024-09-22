@@ -1,5 +1,7 @@
 import { useContext } from 'react';
 
-import { ThemeContext } from '../context/theme';
+import { ThemeContext, TSetTheme } from '../context/theme';
+import { ETheme } from '../interfaces';
 
-export const useTheme = () => useContext(ThemeContext);
+type ThemeContextType = [ETheme, TSetTheme];
+export const useTheme = (): ThemeContextType => useContext(ThemeContext);

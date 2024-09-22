@@ -1,9 +1,24 @@
-import { useTheme } from '../hooks';
+import React from 'react'
 
-const Button = (props) => {
+import { useTheme } from '../hooks';
+import { ETheme } from '../interfaces';
+
+type TButtonVariant = 'primary' | 'secondary' | 'warn' | 'error';
+type TButtonType = 'button' | 'submit' | 'reset'
+
+interface IButtonProps {
+  children?: React.ReactNode;
+  variant?: TButtonVariant;
+  disabled?: boolean;
+  outlined?: boolean;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: TButtonType;
+}
+
+const Button = (props: IButtonProps) => {
   const {
     children,
-    variant = 'primary', // secondary, warn, error
+    variant = 'primary',
     disabled = false,
     outlined = false,
     onClick,
@@ -13,7 +28,7 @@ const Button = (props) => {
   const [theme] = useTheme();
 
   const buttonStyles =
-    theme === 'light'
+    theme === ETheme.Light
       ? { background: 'white', color: 'black' }
       : { background: 'black', color: 'white' };
 
